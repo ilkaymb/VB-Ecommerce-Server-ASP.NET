@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\VB-ecommerce-backend.props" />
+</Project>
