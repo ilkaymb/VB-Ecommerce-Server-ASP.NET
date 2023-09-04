@@ -65,7 +65,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("INSERT INTO products_earphones (brand, model, price, color, image_path) VALUES (@Brand, @Model, @Price, @Color, @Image_Path)", earPhone);
+                var result = await connection.ExecuteAsync("INSERT INTO products_earphones (brand, model, price, color, image_path,stock) VALUES (@Brand, @Model, @Price, @Color, @image_path,@Stock)", earPhone);
 
                 return CreatedAtAction(nameof(GetEarPhone), new { id = earPhone.Id }, earPhone);
             }
@@ -88,7 +88,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("UPDATE products_earphones SET brand = @Brand, model = @Model, price = @Price, color = @Color, image_path = @Image_Path WHERE Id = @Id", earPhone);
+                var result = await connection.ExecuteAsync("UPDATE products_earphones SET brand = @Brand, model = @Model, price = @Price, color = @Color, image_path = @image_path,stock=@Stock WHERE Id = @Id", earPhone);
 
                 if (result == 0)
                 {
@@ -138,5 +138,7 @@ public class EarPhone
     public string Model { get; set; }
     public decimal Price { get; set; }
     public string Color { get; set; }
-    public string Image_Path { get; set; } // Resim dosya yolu sütunu
+    public string image_path { get; set; } // Resim dosya yolu sütunu
+    public int Stock { get; set; }
+
 }

@@ -65,7 +65,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("INSERT INTO products_computer (brand, model, processor, ram_capacity, storage_capacity, price, image_path) VALUES (@Brand, @Model, @Processor, @Ram_Capacity, @Storage_Capacity, @Price, @Image_Path)", computer);
+                var result = await connection.ExecuteAsync("INSERT INTO products_computer (brand, model, processor, ram_capacity, storage_capacity, price, image_path,stock) VALUES (@Brand, @Model, @Processor, @Ram_Capacity, @Storage_Capacity, @Price, @image_path,@Stock)", computer);
 
                 return CreatedAtAction(nameof(GetComputer), new { id = computer.Id }, computer);
             }
@@ -88,7 +88,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("UPDATE products_computer SET brand = @Brand, model = @Model, processor = @Processor, ram_capacity = @Ram_Capacity, storage_capacity = @Storage_Capacity, price = @Price, image_path = @Image_Path WHERE Id = @Id", computer);
+                var result = await connection.ExecuteAsync("UPDATE products_computer SET brand = @Brand, model = @Model, processor = @Processor, ram_capacity = @Ram_Capacity, storage_capacity = @Storage_Capacity, price = @Price, image_path = @image_path,stock=@Stock WHERE Id = @Id", computer);
 
                 if (result == 0)
                 {
@@ -140,6 +140,8 @@ namespace VB_ecommerce_backend.Controllers
         public int Ram_Capacity { get; set; }
         public int Storage_Capacity { get; set; }
         public double Price { get; set; }
-        public string Image_Path { get; set; }
+        public string image_path { get; set; }
+        public int Stock { get; set; }
+
     }
 }

@@ -102,28 +102,19 @@ public class LikeController : Controller
             // Beğenilen ürünlerin detaylarını products_computer veya products_earphone tablosundan alın
             string tableName = (categoryId == 1) ? "products_computer" : "products_earphones";
 
-            var likedProducts = await connection.QueryAsync<Computer>(
+            var likedProducts = await connection.QueryAsync(
                 $"SELECT * FROM {tableName} WHERE id IN @likedProductIds",
                 new { likedProductIds });
 
             return Ok(likedProducts);
         }
     }
+
+
     public class LikeModel
     {
         public int product_id { get; set; }
         public int customer_id { get; set; }
         public int category_id { get; set; }
-    }
-    public class Computer
-    {
-        public int Id { get; set; }
-        public string Brand { get; set; }
-        public string Model { get; set; }
-        public string Processor { get; set; }
-        public int Ram_Capacity { get; set; }
-        public int Storage_Capacity { get; set; }
-        public double Price { get; set; }
-        public string Image_Path { get; set; }
     }
 }
