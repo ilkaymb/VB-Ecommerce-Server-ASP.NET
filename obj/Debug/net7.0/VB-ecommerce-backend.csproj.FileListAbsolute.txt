@@ -64,3 +64,11 @@ C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debu
 C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\System.Data.SqlClient.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\runtimes\win-x64\native\sni.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\runtimes\win-x86\native\sni.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Ilkay Mehmet Bora\RiderProjects\Solution1\VB-ecommerce-backend\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

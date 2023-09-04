@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 
 namespace VB_ecommerce_backend.Controllers;
@@ -19,44 +20,76 @@ public class SalesController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddProducts(List<ProductModel> products)
+    public async Task<IActionResult> GetProductsByCategoryAndCustomer(int category_id, int customer_id)
     {
-        if (products == null || products.Count == 0)
+        if (category_id != 1 && category_id != 2)
         {
-            return BadRequest("Boş veya geçersiz veri.");
+            return BadRequest("Geçersiz kategori ID'si.");
         }
 
-      
         _connection.Open();
-            foreach (var product in products)
-            {
-                string insertQuery = "INSERT INTO sales (product_category, product_id, customer_id) VALUES (@product_category, @product_id, @customer_id)";
-                MySqlCommand cmd = new MySqlCommand(insertQuery, _connection);
-                cmd.Parameters.AddWithValue("@product_category", product.product_category);
-                cmd.Parameters.AddWithValue("@product_id", product.product_id);
-                cmd.Parameters.AddWithValue("@customer_id", product.customer_id);
-                cmd.ExecuteNonQuery();
-                
-                if (product.product_category == 1)
-                {
-                    string updateQuery = "UPDATE products_computer SET stock = stock - 1 WHERE id = @product_id";
-                    MySqlCommand updateCmd = new MySqlCommand(updateQuery, _connection);
-                    updateCmd.Parameters.AddWithValue("@product_id", product.product_id);
-                    updateCmd.ExecuteNonQuery();
-                }
-                // Eğer product_category 2 ise products_earphones tablosunda stok azaltma
-                else if (product.product_category == 2)
-                {
-                    string updateQuery = "UPDATE products_earphones SET stock = stock - 1 WHERE id = @product_id";
-                    MySqlCommand updateCmd = new MySqlCommand(updateQuery, _connection);
-                    updateCmd.Parameters.AddWithValue("@product_id", product.product_id);
-                    updateCmd.ExecuteNonQuery();
-                }
-            }
-        
+        string selectQuery = "";
 
-        return Ok("Veriler başarıyla eklendi.");
+        if (category_id == 1)
+        {
+            // Bilgisayar ürünlerini çek
+            selectQuery = "SELECT p.* FROM products_computer p " +
+                          "INNER JOIN sales s ON p.id = s.product_id " +
+                          "WHERE s.customer_id = @customer_id";
+        }
+        else if (category_id == 2)
+        {
+            // Kulaklık ürünlerini çek
+            selectQuery = "SELECT p.* FROM products_earphones p " +
+                          "INNER JOIN sales s ON p.id = s.product_id " +
+                          "WHERE s.customer_id = @customer_id";
+        }
+
+        MySqlCommand cmd = new MySqlCommand(selectQuery, _connection);
+        cmd.Parameters.AddWithValue("@customer_id", customer_id);
+
+        using (var reader = cmd.ExecuteReader())
+        {
+            List<ProductModel> productList = new List<ProductModel>();
+
+            while (reader.Read())
+            {
+                // Veritabanından gelen verileri ProductModel nesnelerine dönüştürün.
+                ProductModel product = new ProductModel
+                {
+                    product_id = reader.GetInt32("id"),
+                    product_category = category_id,
+                    // Diğer özellikleri de burada alabilirsiniz.
+                };
+                productList.Add(product);
+            }
+
+            return Ok(productList);
+        }
     }
+[HttpGet("user-purchased/{customerId}/{categoryId}")]
+public async Task<IActionResult> GetUserPurchased(int customerId, int categoryId)
+{
+    using (var connection = _connection)
+    {
+        connection.Open();
+
+        // Kullanıcının beğendiği ürünlerin kimliklerini alın
+        var likedProductIds = await connection.QueryAsync<int>(
+            "SELECT product_id FROM like_relations WHERE customer_id = @customerId",
+            new { customerId });
+
+        // Beğenilen ürünlerin detaylarını products_computer veya products_earphone tablosundan alın
+        string tableName = (categoryId == 1) ? "products_computer" : "products_earphones";
+
+        var likedProducts = await connection.QueryAsync(
+            $"SELECT * FROM {tableName} WHERE id IN @likedProductIds",
+            new { likedProductIds });
+
+        return Ok(likedProducts);
+    }
+}
+
 
     public class ProductModel
     {

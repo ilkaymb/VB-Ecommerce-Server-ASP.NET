@@ -41,4 +41,14 @@ public class CustomerController : Controller
             return StatusCode(500, "Bir hata oluştu.");
         }
     }
+
+    public class SelectedProduct
+{
+    public int ProductId { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+
+
+
 }
