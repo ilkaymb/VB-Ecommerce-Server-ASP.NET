@@ -27,7 +27,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var query = await connection.QueryAsync<Computer>("SELECT * FROM products_computer");
+                var query = await connection.QueryAsync<Computer>("SELECT * FROM computer");
 
                 var computers = query.AsList();
 

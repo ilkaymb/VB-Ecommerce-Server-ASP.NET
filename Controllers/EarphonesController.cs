@@ -27,7 +27,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var query = await connection.QueryAsync<EarPhone>("SELECT * FROM products_earphones");
+                var query = await connection.QueryAsync<EarPhone>("SELECT * FROM earphone");
 
                 var earPhones = query.AsList();
 
@@ -42,7 +42,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var query = await connection.QuerySingleOrDefaultAsync<EarPhone>("SELECT * FROM products_earphones WHERE Id = @Id", new { Id = id });
+                var query = await connection.QuerySingleOrDefaultAsync<EarPhone>("SELECT * FROM earphone WHERE Id = @Id", new { Id = id });
 
                 if (query == null)
                 {
@@ -65,7 +65,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("INSERT INTO products_earphones (brand, model, price, color, image_path,stock) VALUES (@Brand, @Model, @Price, @Color, @image_path,@Stock)", earPhone);
+                var result = await connection.ExecuteAsync("INSERT INTO earphone (brand, model, price, color, image_path,stock) VALUES (@Brand, @Model, @Price, @Color, @image_path,@Stock)", earPhone);
 
                 return CreatedAtAction(nameof(GetEarPhone), new { id = earPhone.Id }, earPhone);
             }
@@ -88,7 +88,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("UPDATE products_earphones SET brand = @Brand, model = @Model, price = @Price, color = @Color, image_path = @image_path,stock=@Stock WHERE Id = @Id", earPhone);
+                var result = await connection.ExecuteAsync("UPDATE earphone SET brand = @Brand, model = @Model, price = @Price, color = @Color, image_path = @image_path,stock=@Stock WHERE Id = @Id", earPhone);
 
                 if (result == 0)
                 {
@@ -106,7 +106,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var result = await connection.ExecuteAsync("DELETE FROM products_earphones WHERE Id = @Id", new { Id = id });
+                var result = await connection.ExecuteAsync("DELETE FROM earphone WHERE Id = @Id", new { Id = id });
 
                 if (result == 0)
                 {
@@ -124,7 +124,7 @@ namespace VB_ecommerce_backend.Controllers
             {
                 connection.Open();
 
-                var query = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM products_earphones");
+                var query = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM earphone");
 
                 return Ok(query);
             }

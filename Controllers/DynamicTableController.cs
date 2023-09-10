@@ -11,51 +11,58 @@ namespace VB_ecommerce_backend.Controllers;
 public class DynamicTableController : Controller
 {
     private readonly IConfiguration _configuration;
+    private readonly MySqlConnection _connection;
 
     public DynamicTableController(IConfiguration configuration)
     {
         _configuration = configuration;
+        _connection =
+            new MySqlConnection("server=localhost;port=3306;database=vb_ecommerce;username=root;password=deneme");
+
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateDynamicTable([FromBody] CreateTableRequest request)
+  [HttpPost]
+public async Task<IActionResult> CreateDynamicTable([FromBody] CreateTableRequest request)
+{
+    try
     {
-        if (request == null)
-        {
-            return BadRequest("Geçersiz veri.");
-        }
+        // Connection String to connect with MySQL database.
+        string connString = "server=localhost;port=3306;database=vb_ecommerce;username=root;password=deneme";
+        MySqlConnection conn = new MySqlConnection(connString);
 
-        try
-        {
-            string connectionString = _configuration.GetConnectionString("MySQLConnection"); // appsettings.json dosyasındaki bağlantı dizesini kullanın
+        conn.Open();
+        string columnDefinitions = string.Join(", ", request.ColumnDefinitions.Select(c => $"{c.Name} {c.Type}"));
+        string createTableSql = $"CREATE TABLE {request.TableName} (id INT AUTO_INCREMENT PRIMARY KEY, {columnDefinitions});";
 
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                await connection.OpenAsync();
+        MySqlCommand cmd = new MySqlCommand(createTableSql, conn);
+        cmd.ExecuteNonQuery();
 
-                // Kullanıcıdan gelen verilere dayalı olarak bir CREATE TABLE sorgusu oluşturun
-                string createTableSql = $"CREATE TABLE {request.TableName} (Id INT AUTO_INCREMENT PRIMARY KEY, {request.ColumnDefinition})";
+        // Oluşturulan tabloyu Category tablosuna ekleyin
+        string insertCategorySql = $"INSERT INTO categories (category_name) VALUES ('{request.TableName}');";
+        MySqlCommand insertCategoryCmd = new MySqlCommand(insertCategorySql, conn);
+        insertCategoryCmd.ExecuteNonQuery();
 
-                using (var command = new MySqlCommand(createTableSql, connection))
-                {
-                    await command.ExecuteNonQueryAsync();
-                }
-
-                return Ok($"'{request.TableName}' adında dinamik bir tablo oluşturuldu.");
-            }
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Tablo oluşturulamadı: {ex.Message}");
-        }
+        Console.WriteLine("Table created successfully and added to categorys table");
+        conn.Close();
+        return Ok();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
     }
 }
 
-public class CreateTableRequest
-{ 
-    public string TableName { get; set; }
-    public string ColumnDefinition { get; set; }
 
-    
+    public class CreateTableRequest
+    {
+        public string TableName { get; set; }
+        public List<ColumnDefinition> ColumnDefinitions { get; set; }
 
+        public class ColumnDefinition
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+        }
+    }
 }
