@@ -263,24 +263,32 @@ public class DynamicDataController : Controller
 
                 conn.Open();
 
-                // Kategori adlarını almak için sorguyu oluşturun
-                string getCategoryNamesSql = "SELECT category_name FROM categories";
+                // Kategori adlarını ve category_id'lerini almak için sorguyu oluşturun
+                string getCategoryNamesSql = "SELECT category_id, category_name FROM categories";
 
                 MySqlCommand cmd = new MySqlCommand(getCategoryNamesSql, conn);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
-                List<string> categoryNames = new List<string>();
+                List<Category> categories = new List<Category>();
 
                 while (reader.Read())
                 {
-                    // Her satırdaki kategori adını alın
+                    // Her satırdaki kategori bilgilerini alın
+                    int categoryId = reader.GetInt32("category_id");
                     string categoryName = reader.GetString("category_name");
-                    categoryNames.Add(categoryName);
+            
+                    Category category = new Category
+                    {
+                        CategoryId = categoryId,
+                        CategoryName = categoryName
+                    };
+            
+                    categories.Add(category);
                 }
 
                 conn.Close();
 
-                return Ok(categoryNames);
+                return Ok(categories);
             }
             catch (Exception e)
             {
@@ -289,10 +297,15 @@ public class DynamicDataController : Controller
             }
         }
 
+
         
         
         
-        
+        public class Category
+        {
+            public int CategoryId { get; set; }
+            public string CategoryName { get; set; }
+        } 
         public class ColumnDetail
         {
             public string Name { get; set; }

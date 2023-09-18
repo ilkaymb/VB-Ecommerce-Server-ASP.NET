@@ -32,8 +32,7 @@ public async Task<IActionResult> CreateDynamicTable([FromBody] CreateTableReques
 
         conn.Open();
         string columnDefinitions = string.Join(", ", request.ColumnDefinitions.Select(c => $"{c.Name} {c.Type}"));
-        string createTableSql = $"CREATE TABLE {request.TableName} (id INT AUTO_INCREMENT PRIMARY KEY, {columnDefinitions});";
-
+        string createTableSql = $"CREATE TABLE {request.TableName} (id INT AUTO_INCREMENT PRIMARY KEY, {columnDefinitions}, likes INT DEFAULT 0);";
         MySqlCommand cmd = new MySqlCommand(createTableSql, conn);
         cmd.ExecuteNonQuery();
 
