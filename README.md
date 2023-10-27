@@ -1,5 +1,5 @@
 # Summary
-It was the e-commerce site I developed during my internship at Vakıfbank. Developed using Angular on the front and asp.net on the back. You can view the frontend of the website from this link: [https://github.com/ilkaymb/VB-Ecommerce-Server-ASP.NET](https://github.com/ilkaymb/VB-Ecommerce-Client-Angular)
+It was the e-commerce site I developed during my internship at Vakıfbank. Developed using Angular on the front and asp.net on the back. You can view the frontend of the website from this link: https://github.com/ilkaymb/VB-Ecommerce-Client-Angular 
 
 # Pages
 You can see the images of the pages below.
